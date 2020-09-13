@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <script>
+            var ctx, p = [];
+            function init() {
+                var canvas = document.getElementById("canvas");     //canvasへの参照を取得
+                ctx = canvas.getContext("2d");                      //コンテキストを取得
+                ctx.strokeStyle = "#FF0000";
+                canvas.onmousedown = mousedown;
+                canvas.onmousemove = mousemove;
+                canvas.onmouseup = mouseup;
+                document.getElementById("clear").onclick = clear;   //ボタンを押すと描画をクリアする
+            }
+            function mousedown(e) {
+                p = [{ x: e.offsetX, y: e.offsetY }];               //配列 p にクリック開始時の座標を代入
+            }
+            function mousemove(e) {
+                if (p.length > 0) {
+                    p.push({ x: e.offsetX, y: e.offsetY });         //配列 p に移動中の軌跡の座標を push する
+                }
+                paint();                                            //軌跡を随時描く
+            }
+            function mouseup(e) {
+                p = {};                                             //マウスが離されたときに配列 p を初期化する
+            }
+            function paint() {
+                ctx.beginPath();
+                ctx.moveTo(p[0].x, p[1].y);
+                for (var i = 1; i < p.length; i++) {
+                    ctx.lineTo(p[i].x, p[i].y);
+                }
+                ctx.stroke();
+            }
+            function clear() {
+                ctx.clearRect(0, 0, 500, 500);
+            }
+
+        </script>
+    </head>
+    <body onload="init()">
+        <button id="clear" onclick="clear()">clear</button><br />
+        <canvas id="canvas" width="500" height="500" style="width:500px; height:500px; border: 1px solid black;"></canvas>
+    </body>
+</html>
